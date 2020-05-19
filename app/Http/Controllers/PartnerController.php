@@ -27,6 +27,35 @@ class PartnerController extends Controller
         ]);
     }
 
+    public function search(Request $request)
+    {
+        $user = Auth::guard()->user();
+        if (!$user) {
+            abort(401);
+        }
+
+        $search = $request->search_params;
+        if (!$search) {
+            return response([
+                'errors_count' => 1,
+                'msg' => "Нет параметров поиска"
+            ]);
+        }
+        $partners = Partner::orderBy("id", "asc");
+        foreach ($search as $parameter) {
+            if (!in_array($parameter['param'], ['id', 'city', 'company_name'])) {
+                continue;
+            }
+            $v = $parameter['value'];
+            $partners = $partners->where($parameter['param'], "ILIKE", "%$v%");
+        }
+        $partners = $partners->take(30)->get();
+        return response([
+            'errors_count' => 0,
+            'partners' => $partners,
+        ]);
+    }
+
     public function show($id, Request $request)
     {
         $user = Auth::guard()->user();

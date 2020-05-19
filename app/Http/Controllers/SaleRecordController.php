@@ -11,7 +11,7 @@ class SaleRecordController extends Controller
 {
     public function store(Request $request)
     {
-        $user = Auth::guard()->user();
+        $user = Auth::guard( "partner_api")->user();
         if (!$user) {
             abort(401);
         }

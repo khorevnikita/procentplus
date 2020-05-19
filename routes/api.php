@@ -35,5 +35,7 @@ Route::get("point_of_sales/{id}", "PointOfSaleController@show");
 Route::get("activity_types", "ActivityTypeController@index");
 
 Route::post("partners/partners_list", "PartnerController@index");
+Route::post("partners/search", "PartnerController@search");
 Route::get("partners/{id}","PartnerController@show");
 Route::post("point_of_sales", "PointOfSaleController@index");
+Route::post("point_of_sales/search", "PointOfSaleController@search");

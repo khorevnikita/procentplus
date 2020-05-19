@@ -37,6 +37,15 @@ class MobileUser extends Authenticatable implements JWTSubject
         $this->attributes['encrypted_password'] = $password;
     }
 
+    /**
+     * Перестраховочный метод
+     * @return |null
+     */
+
+    public function getPartnerAttribute(){
+        return null;
+    }
+
 
     /**
      * Get the identifier that will be stored in the subject claim of the JWT.

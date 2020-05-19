@@ -105,7 +105,7 @@ class AuthController extends Controller
         }
         $data = $request->mobile_user;
         if ($token = $this->guard("partner_api")->attempt(['email' => $data['email'], 'password' => $data['password']])) {
-            return $this->respondWithToken($token);
+            return $this->respondWithToken($token, "partner_api");
         }
 
         return response()->json(['error' => 'Unauthorized'], 401);
@@ -149,12 +149,17 @@ class AuthController extends Controller
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    protected function respondWithToken($token)
+    protected function respondWithToken($token, $provider = null)
     {
+        $user = $this->guard($provider)->user();
         return response()->json([
+            'errors_count' => 0,
+
             'access_token' => $token,
             'token_type' => 'bearer',
-            'expires_in' => $this->guard()->factory()->getTTL() * 60
+            'expires_in' => $this->guard()->factory()->getTTL() * 60,
+            'user' => $user->only(['id','name','email','created_at','updated_at',"city",'is_active']),
+            'partner' => $user->partner
         ]);
     }
 
@@ -163,7 +168,7 @@ class AuthController extends Controller
      *
      * @return \Illuminate\Contracts\Auth\Guard
      */
-    public function guard($provider=null)
+    public function guard($provider = null)
     {
         return Auth::guard($provider);
     }

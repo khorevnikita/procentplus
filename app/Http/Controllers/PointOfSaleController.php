@@ -22,9 +22,42 @@ class PointOfSaleController extends Controller
 
         return response([
             'errors_count' => 0,
-            'point_of_sales'=>$points
+            'point_of_sales' => $points
         ]);
+    }
 
+    public function search(Request $request)
+    {
+        $user = Auth::guard()->user();
+        if (!$user) {
+            abort(401);
+        }
+
+        $search = $request->search_params;
+        if (!$search) {
+            return response([
+                'errors_count' => 1,
+                'msg' => "Нет параметров поиска"
+            ]);
+        }
+
+
+        $points = PointOfSale::orderBy("id", "asc");
+
+        foreach ($search as $parameter) {
+            if (!in_array($parameter['param'], ['id', 'city', 'address', 'name'])) {
+                continue;
+            }
+            $v = $parameter['value'];
+            $points = $points->where($parameter['param'], "ILIKE", "%$v%");
+        }
+
+        $points = $points->take(30)->get();
+
+        return response([
+            'errors_count' => 0,
+            'point_of_sales' => $points,
+        ]);
     }
 
     public function show($id)
