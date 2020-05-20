@@ -24,7 +24,7 @@ class AuthController extends Controller
     public function register(Request $request)
     {
         $validatedData = Validator::make($request->mobile_user, [
-            'email' => ['required', 'string', 'email', 'max:255', 'unique:mobile_users,email'],
+            'email' => ['required', 'string', 'email', 'max:255'],
             'password' => ['required', "string", "min:6", "confirmed"],
          #   'name' => ['required', "string"],
             'city' => ['required', "string"],
@@ -34,6 +34,14 @@ class AuthController extends Controller
             return response([
                 'errors_count' => count($validatedData->errors()),
                 'msg' => "Не все поля заполнены корректно"
+            ]);
+        }
+
+        $user = MobileUser::where("email",$request->email)->first();
+        if(!$user){
+            return response([
+                'errors_count' => 1,
+                'msg' => "Email уже используется в приложении"
             ]);
         }
 
