@@ -38,7 +38,7 @@ class AuthController extends Controller
         }
 
         $user = MobileUser::where("email",$request->email)->first();
-        if(!$user){
+        if($user){
             return response([
                 'errors_count' => 1,
                 'msg' => "Email уже используется в приложении"
