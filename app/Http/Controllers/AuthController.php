@@ -176,7 +176,7 @@ class AuthController extends Controller
             'access_token' => $token,
             'token_type' => 'bearer',
             'expires_in' => $this->guard()->factory()->getTTL() * 60,
-            'user' => $user->only(['id', 'name', 'email', 'created_at', 'updated_at', "city", 'is_active']),
+            'user' => $user->only(['id', 'name', 'email', 'created_at', 'updated_at', "city", 'is_active','is_operator']),
             'partner' => $user->partner
         ]);
     }
