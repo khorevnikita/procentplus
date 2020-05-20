@@ -26,7 +26,7 @@ class AuthController extends Controller
         $validatedData = Validator::make($request->mobile_user, [
             'email' => ['required', 'string', 'email', 'max:255', 'unique:mobile_users,email'],
             'password' => ['required', "string", "min:6", "confirmed"],
-            'name' => ['required', "string"],
+         #   'name' => ['required', "string"],
             'city' => ['required', "string"],
 
         ]);
@@ -40,7 +40,7 @@ class AuthController extends Controller
         $data = $request->mobile_user;
 
         $user = new MobileUser();
-        $user->name = $data['name'];
+        $user->name = $data['name']??null;
         $user->email = $data['email'];
         $user->password = bcrypt($data['password']);
         $user->sign_in_count = 0;
