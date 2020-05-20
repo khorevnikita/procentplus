@@ -24,7 +24,7 @@ class MobileUserController extends Controller
         }
 
         #$qr = QrCode::format('png')->generate(json_encode(['user_id' => $user->id, 'user_name' => $user->name]));
-        $qr = base64_encode(QrCode::format('png')->size(100)->generate(json_encode(['user_id' => $user->id, 'user_name' => $user->name])));
+        $qr = base64_encode(QrCode::format('png')->size(250)->generate(json_encode(['user_id' => $user->id, 'user_name' => $user->name])));
 
 
         $user->qr_code = $qr;
