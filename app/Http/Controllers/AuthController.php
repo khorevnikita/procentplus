@@ -71,6 +71,12 @@ class AuthController extends Controller
      */
     public function login(Request $request)
     {
+        if(!$request->mobile_user){
+            return response([
+                'errors_count' => 1,
+                'msg' => "Некорректный запрос"
+            ]);
+        }
         $validatedData = Validator::make($request->mobile_user, [
             'email' => ['required', 'string', 'email', 'max:255'],
             'password' => ['required', "string", "min:6"],
@@ -83,6 +89,7 @@ class AuthController extends Controller
             ]);
         }
         $data = $request->mobile_user;
+
         if ($token = $this->guard()->attempt(['email' => $data['email'], 'password' => $data['password']])) {
             return $this->respondWithToken($token);
         }
