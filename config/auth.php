@@ -15,7 +15,7 @@ return [
 
     'defaults' => [
         'guard' => 'api',
-        'passwords' => 'users',
+        'passwords' => 'mobile_users',
     ],
 
     /*
@@ -107,6 +107,13 @@ return [
             'expire' => 60,
             'throttle' => 60,
         ],
+        'mobile_users' => [
+            'provider' => 'mobile_users',
+            'table' => 'password_resets',
+            'expire' => 60,
+            'throttle' => 60,
+        ],
+
     ],
 
     /*
