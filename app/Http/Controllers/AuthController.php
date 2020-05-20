@@ -26,7 +26,7 @@ class AuthController extends Controller
         $validatedData = Validator::make($request->mobile_user, [
             'email' => ['required', 'string', 'email', 'max:255'],
             'password' => ['required', "string", "min:6"],
-         #   'name' => ['required', "string"],
+            #   'name' => ['required', "string"],
             'city' => ['required', "string"],
 
         ]);
@@ -37,8 +37,8 @@ class AuthController extends Controller
             ]);
         }
 
-        $user = MobileUser::where("email",$request->email)->first();
-        if($user){
+        $user = MobileUser::where("email", $request->email)->first();
+        if ($user) {
             return response([
                 'errors_count' => 1,
                 'msg' => "Email уже используется в приложении"
@@ -48,7 +48,7 @@ class AuthController extends Controller
         $data = $request->mobile_user;
 
         $user = new MobileUser();
-        $user->name = $data['name']??null;
+        $user->name = $data['name'] ?? null;
         $user->email = $data['email'];
         $user->password = bcrypt($data['password']);
         $user->sign_in_count = 0;
@@ -79,7 +79,7 @@ class AuthController extends Controller
      */
     public function login(Request $request)
     {
-        if(!$request->mobile_user){
+        if (!$request->mobile_user) {
             return response([
                 'errors_count' => 1,
                 'msg' => "Некорректный запрос"
@@ -102,7 +102,10 @@ class AuthController extends Controller
             return $this->respondWithToken($token);
         }
 
-        return response()->json(['error' => 'Unauthorized'], 401);
+        return response()->json([
+            'errors_count'=>1,
+            'msg'=>"Неверные данные для входа"
+        ]);
     }
 
     public function loginPartner(Request $request)
@@ -173,7 +176,7 @@ class AuthController extends Controller
             'access_token' => $token,
             'token_type' => 'bearer',
             'expires_in' => $this->guard()->factory()->getTTL() * 60,
-            'user' => $user->only(['id','name','email','created_at','updated_at',"city",'is_active']),
+            'user' => $user->only(['id', 'name', 'email', 'created_at', 'updated_at', "city", 'is_active']),
             'partner' => $user->partner
         ]);
     }
