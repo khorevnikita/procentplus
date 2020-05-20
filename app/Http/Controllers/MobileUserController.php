@@ -23,9 +23,12 @@ class MobileUserController extends Controller
             abort(403);
         }
 
-        $qr = QrCode::size(10)->format('png')->generate(json_encode(['user_id' => $user->id, 'user_name' => $user->name]));
-        $user->qr_code = $qr;
+        #$qr = QrCode::format('png')->generate(json_encode(['user_id' => $user->id, 'user_name' => $user->name]));
+        $qr = base64_encode(QrCode::format('png')->size(100)->generate(json_encode(['user_id' => $user->id, 'user_name' => $user->name])));
 
+
+        $user->qr_code = $qr;
+     #   dd($user);
         return response([
             'errors_count' => 0,
             'data' => $user,
