@@ -25,7 +25,7 @@ class AuthController extends Controller
     {
         $validatedData = Validator::make($request->mobile_user, [
             'email' => ['required', 'string', 'email', 'max:255'],
-            'password' => ['required', "string", "min:6", "confirmed"],
+            'password' => ['required', "string", "min:6"],
          #   'name' => ['required', "string"],
             'city' => ['required', "string"],
 
