@@ -21,6 +21,7 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 Route::get("mobile_users/{user_id}", "MobileUserController@show");
 Route::post("mobile_users", "AuthController@register");
 Route::post("mobile_users/sign_in", "AuthController@login")->name("login");
+Route::post("mobile_users/password", "AuthController@resetPasswordLink")->name("login");
 Route::post("users/sign_in", "AuthController@loginPartner")->name("login_partner");
 Route::delete("mobile_users/sign_out", "AuthController@logout");
 Route::post("mobile_users/password", "AuthController@resetPasswordLink");

@@ -2,12 +2,17 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\ConfirmMail;
+use App\Mail\ResetPassword;
 use App\MobileUser;
 use App\User;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Str;
 
 class AuthController extends Controller
 {
@@ -54,7 +59,13 @@ class AuthController extends Controller
         $user->sign_in_count = 0;
         $user->city = $data['city'];
         $user->is_active = true;
+
+        $user->confirmation_sent_at = Carbon::now();
+        $token = Str::random(20);
+        $user->confirmation_token = $token;
         $user->save();
+
+        Mail::to($user)->send(new ConfirmMail($token));
 
         return response([
             'errors_count' => 0,
@@ -103,8 +114,8 @@ class AuthController extends Controller
         }
 
         return response()->json([
-            'errors_count'=>1,
-            'msg'=>"Неверные данные для входа"
+            'errors_count' => 1,
+            'msg' => "Неверные данные для входа"
         ]);
     }
 
@@ -176,7 +187,7 @@ class AuthController extends Controller
             'access_token' => $token,
             'token_type' => 'bearer',
             'expires_in' => $this->guard()->factory()->getTTL() * 60,
-            'user' => $user->only(['id', 'name', 'email', 'created_at', 'updated_at', "city", 'is_active','is_operator']),
+            'user' => $user->only(['id', 'name', 'email', 'created_at', 'updated_at', "city", 'is_active', 'is_operator']),
             'partner' => $user->partner
         ]);
     }
@@ -189,5 +200,35 @@ class AuthController extends Controller
     public function guard($provider = null)
     {
         return Auth::guard($provider);
+    }
+
+    public function resetPasswordLink(Request $request)
+    {
+        $validatedData = Validator::make($request->mobile_user, [
+            'email' => ['required', 'string', 'email', 'max:255'],
+        ]);
+        if ($validatedData->fails()) {
+            return response([
+                'errors_count' => count($validatedData->errors()),
+                'msg' => "Не все поля заполнены корректно"
+            ]);
+        }
+
+        $user = MobileUser::where("email", $request->mobile_user['email'])->first();
+        if (!$user) {
+            return response([
+                'errors_count' => 1,
+                'msg' => "Пользователь с таким email не найден"
+            ]);
+        }
+        $token = Str::random(20);
+        $user->reset_password_token = $token;
+        $user->reset_password_sent_at = Carbon::now();
+        $user->save();
+
+        Mail::to($user)->send(new ResetPassword($user));
+        return response([
+            'errors_count' => 0
+        ]);
     }
 }

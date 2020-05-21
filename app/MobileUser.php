@@ -19,7 +19,11 @@ class MobileUser extends Authenticatable implements JWTSubject
 
     public function partner()
     {
-        return $this->hasOne(Partner::class);
+        return $this->belongsTo(Partner::class);
+    }
+
+    public function point(){
+        return $this->belongsTo(PointOfSale::class);
     }
 
     public function getAuthPassword()
