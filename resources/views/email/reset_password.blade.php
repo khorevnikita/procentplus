@@ -2,7 +2,7 @@
     <p>Здравствуйте, {{$user->email}}!</p>
     <p>Вы либо кто-либо другой запросил ссылку на сброс пароля в приложении Процент+</p>
     <p>
-        <a href="http://procentplus.com/api/mobile_users/password/edit.121?reset_password_token={{$user->reset_password_token}}">Изменить пароль</a>
+        <a href="http://procentplus.com/api/mobile_users/password/edit.{{$user->id}}?reset_password_token={{$user->reset_password_token}}">Изменить пароль</a>
     </p>
     <p>Если Вы не запрашивали данное действие - просто игнорируйте данное письмо.</p>
     <p>Пароль не будет изменен до тех пор, пока Вы не проследуете по ссылке, данной выше.</p>
