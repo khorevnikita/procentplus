@@ -70,7 +70,9 @@ class PointOfSaleController extends Controller
         if (!$point) {
             abort(404);
         }
-        $qr = QrCode::size(10)->format('svg')->generate(json_encode($point->get(['name', 'city', 'address'])));
+       # $qr = QrCode::size(10)->format('svg')->generate(json_encode($point->get(['name', 'city', 'address'])));
+        $qr = base64_encode(QrCode::format('png')->size(250)->generate(json_encode($point->get(['name', 'city', 'address']))));
+
         $point->qr_code = $qr;
         return response([
             'errors_count' => 0,

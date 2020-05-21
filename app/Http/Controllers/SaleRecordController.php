@@ -11,7 +11,7 @@ class SaleRecordController extends Controller
 {
     public function store(Request $request)
     {
-        $user = Auth::guard( "partner_api")->user();
+        $user = Auth::guard()->user();
         if (!$user) {
             abort(401);
         }
@@ -28,12 +28,20 @@ class SaleRecordController extends Controller
                 'msg' => "Не все поля заполнены корректно"
             ]);
         }
+
+        if (!$user->partner_id) {
+            return response([
+                'errors_count' => 1,
+                'msg' => "Контрагент не указан"
+            ]);
+        }
+
         $sale = new SaleRecord();
         $sale->mobile_user_id = $user->id;
-        $sale->partner_id = $data['partner_id'];
+        $sale->partner_id = $data['partner_id'] ?? $user->partner_id;
         $sale->discount = $data['discount'];
         $sale->original_price = $data['original_price'];
-        $sale->point_of_sale_id = $data['point_of_sale_id'];
+        $sale->point_of_sale_id = $data['point_of_sale_id'] ?? $user->point_of_sale_id;
         $sale->date = $data['date'];
         $sale->revenue = $data['revenue'];
         $sale->save();
