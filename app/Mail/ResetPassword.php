@@ -31,6 +31,6 @@ class ResetPassword extends Mailable
      */
     public function build()
     {
-        return $this->view('email.reset_password');
+        return $this->view('email.reset_password')->subject("Инструкции по восстановлению пароля");
     }
 }
