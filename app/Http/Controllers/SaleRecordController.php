@@ -38,11 +38,7 @@ class SaleRecordController extends Controller
             ]);
         }
 
-        $partner_id = $data['partner_id'] ?? $user->partner_id;
-        $partner = Partner::find($partner_id);
-        $balance = $user->sales->where("partner_id", $partner->id)->sum('original_price');
-        $bonus = $partner->bonuses->where("sum_from", "<", $balance)->sortBy("sum_from")->first();
-        $revenue = $data['original_price'] * ( 1- $bonus->percent / 100 );
+        $revenue = $data['original_price'] * ( 1- $data['discount'] / 100 );
 
         $sale = new SaleRecord();
         $sale->mobile_user_id = $user->id;
