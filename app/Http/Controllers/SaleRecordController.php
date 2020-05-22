@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Partner;
 use App\SaleRecord;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
@@ -20,7 +21,7 @@ class SaleRecordController extends Controller
         $validatedData = Validator::make($data, [
             'discount' => ['required', 'string', 'max:255'],
             'original_price' => ['required', 'string', 'max:255'],
-            'date' => ['required', 'string', 'max:255'],
+           # 'date' => ['required', 'string', 'max:255'],
             #'revenue' => ['required', 'string', 'max:255'],
         ]);
         if ($validatedData->fails()) {
@@ -49,7 +50,7 @@ class SaleRecordController extends Controller
         $sale->discount = $data['discount'];
         $sale->original_price = $data['original_price'];
         $sale->point_of_sale_id = $data['point_of_sale_id'] ?? $user->point_of_sale_id;
-        $sale->date = $data['date'];
+        $sale->date = $data['date'] ?? Carbon::now();
         $sale->revenue = $data['revenue'] ?? $revenue;
         $sale->save();
 
