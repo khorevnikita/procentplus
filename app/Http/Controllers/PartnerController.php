@@ -16,7 +16,7 @@ class PartnerController extends Controller
             abort(401);
         }
         $type = ActivityType::with(['partners' => function ($q) {
-            $q->select("id", "name", "city", "activity_type_id");
+            $q->select("id", "company_name", "city", "activity_type_id");
         }])->where("activity_types.id", $request->activity_type_id)->get();
         if (!$type) {
             abort(404);

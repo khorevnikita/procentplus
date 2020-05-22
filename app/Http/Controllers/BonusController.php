@@ -47,13 +47,16 @@ class BonusController extends Controller
         $bonus = $partner->bonuses->where("sum_from", "<", $balance)->sortBy("sum_from")->first();
         $nextBonus = $partner->bonuses->where("sum_from", ">", $balance)->sortBy("sum_from")->first();
         return response([
-            'partner_id' => $partner->id,
-            'user_id' => $user->id,
-            'balance' => $balance,
-            'current_discount' => $bonus ? $bonus->percent : 0,
-            'next_bonus_discount' => $nextBonus ? $nextBonus->percent : 0,
-            'next_bonus_from' => $nextBonus ? $nextBonus->sum_from : 0,
-            'text' => $nextBonus ? "" : "Пользователь имеет максимальный бонус"
+            'errors_count' => 0,
+            'user_bonus' => [
+                'partner_id' => $partner->id,
+                'user_id' => $user->id,
+                'balance' => $balance,
+                'current_discount' => $bonus ? $bonus->percent : 0,
+                'next_bonus_discount' => $nextBonus ? $nextBonus->percent : 0,
+                'next_bonus_from' => $nextBonus ? $nextBonus->sum_from : 0,
+                'text' => $nextBonus ? "" : "Пользователь имеет максимальный бонус"
+            ]
         ]);
     }
 }
