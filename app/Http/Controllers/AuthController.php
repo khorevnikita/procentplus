@@ -10,6 +10,7 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
@@ -222,11 +223,11 @@ class AuthController extends Controller
             ]);
         }
         $token = Str::random(20);
-        $user->reset_password_token = $token;
+        $user->reset_password_token = Hash::make($token);
         $user->reset_password_sent_at = Carbon::now();
         $user->save();
 
-        Mail::to($user)->send(new ResetPassword($user));
+        Mail::to($user)->send(new ResetPassword($user,$token));
         return response([
             'errors_count' => 0
         ]);
