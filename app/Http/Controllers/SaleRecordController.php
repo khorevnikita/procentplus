@@ -19,9 +19,9 @@ class SaleRecordController extends Controller
         }
         $data = $request->sale_record;
         $validatedData = Validator::make($data, [
-            'mobile_user_id' => ['required', 'integer'],
-            'discount' => ['required', 'string', 'max:255'],
-            'original_price' => ['required', 'string', 'max:255'],
+            'mobile_user_id' => ['required'],
+            'discount' => ['required'],
+            'original_price' => ['required']
            # 'date' => ['required', 'string', 'max:255'],
             #'revenue' => ['required', 'string', 'max:255'],
         ]);
