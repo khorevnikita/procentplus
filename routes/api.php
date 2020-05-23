@@ -24,10 +24,14 @@ Route::post("mobile_users/sign_in", "AuthController@login")->name("login");
 Route::post("mobile_users/password", "AuthController@resetPasswordLink");
 Route::post("users/sign_in", "AuthController@loginPartner")->name("login_partner");
 Route::delete("mobile_users/sign_out", "AuthController@logout");
+
 Route::post("mobile_users/password", "AuthController@resetPasswordLink");
+Route::get("mobile_users/password/edit/{id}", "AuthController@resetPasswordPage");
+Route::put("mobile_users/password", "AuthController@resetPassword");
 
 Route::post("sale_records", "SaleRecordController@store");
 Route::get("sale_records", "SaleRecordController@index");
+
 Route::post("bonuses/user_bonus", "BonusController@show");
 
 Route::get("point_of_sales", "PointOfSaleController@index");
@@ -37,6 +41,8 @@ Route::get("activity_types", "ActivityTypeController@index");
 
 Route::post("partners/partners_list", "PartnerController@index");
 Route::post("partners/search", "PartnerController@search");
-Route::get("partners/{id}","PartnerController@show");
+Route::get("partners/{id}", "PartnerController@show");
 Route::post("point_of_sales", "PointOfSaleController@index");
 Route::post("point_of_sales/search", "PointOfSaleController@search");
+
+

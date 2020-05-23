@@ -227,9 +227,61 @@ class AuthController extends Controller
         $user->reset_password_sent_at = Carbon::now();
         $user->save();
 
-        Mail::to($user)->send(new ResetPassword($user,$token));
+        Mail::to($user)->send(new ResetPassword($user, $token));
         return response([
             'errors_count' => 0
+        ]);
+    }
+
+    public function resetPasswordPage($user_id, Request $request)
+    {
+        $user = MobileUser::findOrFail($user_id);
+        return view("reset_password", compact("user"));
+    }
+
+    public function resetPassword(Request $request)
+    {
+        $data = $request->mobile_user;
+
+        $password = $data['password'] ?? null;
+        $c_password = $data['password_confirmation'] ?? null;
+        if (!$password || !$c_password) {
+            return response([
+                "errors_count" => 1,
+                'msg' => 'Заполните все данные'
+            ]);
+        }
+        if (mb_strlen($password) < 6) {
+            return response([
+                "errors_count" => 1,
+                'msg' => 'Пароль должен быть не менее 6 символов'
+            ]);
+        }
+        if ($password != $c_password) {
+            return response([
+                "errors_count" => 1,
+                'msg' => 'Пароли не совпадают'
+            ]);
+        }
+        $user = MobileUser::find($data['id']);
+        if (!$user) {
+            return response([
+                "errors_count" => 1,
+                'msg' => 'Пользователь не найден'
+            ]);
+        }
+
+        if (Hash::check($data['reset_password_token'], $user->reset_password_token)) {
+            $user->password = bcrypt($data['password']);
+            $user->save();
+            return response([
+                "errors_count" => 0,
+                "msg" => 'Пароль успешно обновлен'
+            ]);
+        };
+        return response([
+            "errors_count" => 1,
+            "msg" => 'Неправильный токен'
         ]);
     }
 }
