@@ -19,6 +19,7 @@ class SaleRecordController extends Controller
         }
         $data = $request->sale_record;
         $validatedData = Validator::make($data, [
+            'mobile_user_id' => ['required', 'integer'],
             'discount' => ['required', 'string', 'max:255'],
             'original_price' => ['required', 'string', 'max:255'],
            # 'date' => ['required', 'string', 'max:255'],
@@ -41,7 +42,7 @@ class SaleRecordController extends Controller
         $revenue = $data['original_price'] * ( 1- $data['discount'] / 100 );
 
         $sale = new SaleRecord();
-        $sale->mobile_user_id = $user->id;
+        $sale->mobile_user_id = $data['mobile_user_id'];
         $sale->partner_id = $data['partner_id'] ?? $user->partner_id;
         $sale->discount = $data['discount'];
         $sale->original_price = $data['original_price'];
