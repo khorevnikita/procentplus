@@ -42,16 +42,14 @@ class AuthController extends Controller
                 'msg' => "Не все поля заполнены корректно"
             ]);
         }
-
-        $user = MobileUser::where("email", $request->email)->first();
+        $data = $request->mobile_user;
+        $user = MobileUser::where("email", $data['email'])->first();
         if ($user) {
             return response([
                 'errors_count' => 1,
                 'msg' => "Email уже используется в приложении"
             ]);
         }
-
-        $data = $request->mobile_user;
 
         $user = new MobileUser();
         $user->name = $data['name'] ?? null;
