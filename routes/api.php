@@ -33,6 +33,7 @@ Route::post("sale_records", "SaleRecordController@store");
 Route::get("sale_records", "SaleRecordController@index");
 
 Route::post("bonuses/user_bonus", "BonusController@show");
+Route::post("bonuses/bonuses_list", "BonusController@index");
 
 Route::get("point_of_sales", "PointOfSaleController@index");
 Route::get("point_of_sales/{id}", "PointOfSaleController@show");
