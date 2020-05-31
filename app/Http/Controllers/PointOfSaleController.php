@@ -11,13 +11,18 @@ class PointOfSaleController extends Controller
 {
     public function index(Request $request)
     {
-        $user = Auth::guard("partner_api")->user();
+        $user = Auth::guard()->user();
         if (!$user) {
             abort(401);
         }
 
         $partner = $user->partner;
-
+        if (!$partner) {
+            return response([
+                'errors_count' => 1,
+                'point_of_sales' => "Партнер не найден"
+            ]);
+        }
         $points = $partner->points;
 
         return response([
@@ -70,7 +75,7 @@ class PointOfSaleController extends Controller
         if (!$point) {
             abort(404);
         }
-       # $qr = QrCode::size(10)->format('svg')->generate(json_encode($point->get(['name', 'city', 'address'])));
+        # $qr = QrCode::size(10)->format('svg')->generate(json_encode($point->get(['name', 'city', 'address'])));
         $qr = base64_encode(QrCode::format('png')->size(250)->generate(json_encode($point->get(['name', 'city', 'address']))));
 
         $point->qr_code = $qr;
