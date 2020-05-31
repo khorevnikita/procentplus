@@ -44,8 +44,8 @@ class BonusController extends Controller
 
 
         $balance = $user->sales->where("partner_id", $partner->id)->sum('original_price');
-        $bonus = $partner->bonuses->where("sum_from", "<", $balance)->sortBy("sum_from")->first();
-        $nextBonus = $partner->bonuses->where("sum_from", ">", $balance)->sortBy("sum_from")->first();
+        $bonus = $partner->bonuses->where("sum_from", "<", $balance)->sortByDesc("sum_from")->first();
+        $nextBonus = $partner->bonuses->where("sum_from", ">", $balance)->sortByDesc("sum_from")->first();
         return response([
             'errors_count' => 0,
             'user_bonus' => [
