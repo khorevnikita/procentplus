@@ -59,7 +59,7 @@ class SaleRecordController extends Controller
 
     public function index(Request $request)
     {
-        $user = Auth::guard("partner_api")->user();
+        $user = Auth::guard()->user();
         if (!$user) {
             abort(401);
         }
