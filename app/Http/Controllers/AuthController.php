@@ -64,7 +64,7 @@ class AuthController extends Controller
         $user->confirmation_token = $token;
         $user->save();
 
-        Mail::to($user)->send(new ConfirmMail($token));
+        #Mail::to($user)->send(new ConfirmMail($token));
 
         return response([
             'errors_count' => 0,
