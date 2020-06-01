@@ -52,9 +52,9 @@ class BonusController extends Controller
                 'partner_id' => $partner->id,
                 'user_id' => $user->id,
                 'balance' => $balance,
-                'current_discount' => $bonus ? $bonus->percent : 0,
-                'next_bonus_discount' => $nextBonus ? $nextBonus->percent : 0,
-                'next_bonus_from' => $nextBonus ? $nextBonus->sum_from : 0,
+                'current_discount' => $bonus ? (int)$bonus->percent : 0,
+                'next_bonus_discount' => $nextBonus ? (int)$nextBonus->percent : 0,
+                'next_bonus_from' => $nextBonus ? (int)$nextBonus->sum_from : 0,
                 'text' => $nextBonus ? "" : "Пользователь имеет максимальный бонус"
             ]
         ]);
