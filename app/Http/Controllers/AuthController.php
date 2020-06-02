@@ -58,7 +58,7 @@ class AuthController extends Controller
         $user->phone = $data['phone'];
         $user->password = bcrypt($data['password']);
         $user->sign_in_count = 0;
-        $user->city = $data['city'];
+        $user->city = $data['city']??null;
         $user->is_active = true;
 
         $user->confirmation_sent_at = Carbon::now();
