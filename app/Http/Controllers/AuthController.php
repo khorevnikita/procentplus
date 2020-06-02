@@ -30,10 +30,11 @@ class AuthController extends Controller
     public function register(Request $request)
     {
         $validatedData = Validator::make($request->mobile_user, [
-            'email' => ['required', 'string', 'email', 'max:255'],
+            #   'email' => ['required', 'string', 'email', 'max:255'],
             'password' => ['required', "string", "min:6"],
+            'phone' => ['required', "string"]
             #   'name' => ['required', "string"],
-            'city' => ['required', "string"],
+            #   'city' => ['required', "string"],
 
         ]);
         if ($validatedData->fails()) {
@@ -43,7 +44,7 @@ class AuthController extends Controller
             ]);
         }
         $data = $request->mobile_user;
-        $user = MobileUser::where("email", $data['email'])->first();
+        $user = MobileUser::where("phone", $data['phone'])->first();
         if ($user) {
             return response([
                 'errors_count' => 1,
@@ -53,7 +54,8 @@ class AuthController extends Controller
 
         $user = new MobileUser();
         $user->name = $data['name'] ?? null;
-        $user->email = $data['email'];
+        $user->email = $data['email'] ?? null;
+        $user->phone = $data['phone'];
         $user->password = bcrypt($data['password']);
         $user->sign_in_count = 0;
         $user->city = $data['city'];
@@ -96,7 +98,7 @@ class AuthController extends Controller
             ]);
         }
         $validatedData = Validator::make($request->mobile_user, [
-            'email' => ['required', 'string', 'email', 'max:255'],
+            'phone' => ['required', 'string', 'max:255'],
             'password' => ['required', "string", "min:6"],
 
         ]);
@@ -108,7 +110,7 @@ class AuthController extends Controller
         }
         $data = $request->mobile_user;
 
-        if ($token = $this->guard()->attempt(['email' => $data['email'], 'password' => $data['password']])) {
+        if ($token = $this->guard()->attempt(['phone' => $data['phone'], 'password' => $data['password']])) {
             return $this->respondWithToken($token);
         }
 
