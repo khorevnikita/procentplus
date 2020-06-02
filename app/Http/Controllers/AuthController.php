@@ -48,7 +48,7 @@ class AuthController extends Controller
         if ($user) {
             return response([
                 'errors_count' => 1,
-                'msg' => "Email уже используется в приложении"
+                'msg' => "Телефон уже используется в приложении"
             ]);
         }
 
