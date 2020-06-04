@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Partner;
 use App\SaleRecord;
+use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -42,6 +43,16 @@ class BonusController extends Controller
             ]);
         }
 
+        if ($request->user_id && $request->user_id != $user->id) {
+            # похоже, что мы оператор
+            if ($user->partner_id != $partner->id) {
+                abort(403);
+            }
+            $user = User::find($request->user_id);
+            if (!$user) {
+                abort(404);
+            }
+        }
 
         $balance = $user->sales->where("partner_id", $partner->id)->sum('revenue');
         $bonus = $partner->bonuses->where("sum_from", "<", $balance)->sortByDesc("sum_from")->first();
