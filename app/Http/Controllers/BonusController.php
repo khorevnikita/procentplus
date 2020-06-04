@@ -2,9 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\MobileUser;
 use App\Partner;
-use App\SaleRecord;
-use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -48,7 +47,7 @@ class BonusController extends Controller
             if ($user->partner_id != $partner->id) {
                 abort(403);
             }
-            $user = User::find($request->user_id);
+            $user = MobileUser::find($request->user_id);
             if (!$user) {
                 abort(404);
             }
